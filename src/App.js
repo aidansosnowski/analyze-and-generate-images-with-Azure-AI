@@ -24,7 +24,8 @@ function App() {
   };
 
   const handleGenerateClick = () => {
-    // Perform image generation here and update the result
+    // Implement your image generation logic here
+    // Update the result accordingly
     setResult(`Generating image from: ${inputValue}`);
     setImageUrl(''); // Clear the image URL when generating
   };
@@ -50,7 +51,7 @@ function App() {
       <div id="result">{result}</div>
 
       {/* Display the image if imageUrl is not empty */}
-      {imageUrl && <img src={imageUrl} alt="Analyzing Image" />}
+      {imageUrl && <img src={imageUrl} alt="Analysis Result" />}
     </div>
   );
 }
