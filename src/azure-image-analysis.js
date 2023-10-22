@@ -1,7 +1,7 @@
 // azure-image-analysis.js
 
 const apiKey = process.env.REACT_APP_AZURE_API_KEY;
-const endpoint = process.env.REACT_APP_AZURE_ENDPOINT;
+const endpoint = process.env.OPEN_AI_ENDPOINT;
 
 async function analyzeImage(imageUrl) {
   
