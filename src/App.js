@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { analyzeImage } from './azure-image-analysis';
-import { generateImage } from './azure-image-generation'; // Import the generateImage function
+import { generateImage } from './azure-image-generation';
 import dotenv from 'dotenv';
 
 dotenv.config(); // Load environment variables from .env
@@ -8,15 +8,15 @@ dotenv.config(); // Load environment variables from .env
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [result, setResult] = useState('');
-  const [generatedImageUrl, setGeneratedImageUrl] = useState(''); // State to store the generated image URL
-  const [isLoading, setIsLoading] = useState(false); // State to track API call loading
+  const [generatedImageUrl, setGeneratedImageUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAnalyzeClick = async () => {
     if (inputValue) {
       try {
         const analysisResult = await analyzeImage(inputValue);
         setResult(JSON.stringify(analysisResult, null, 2));
-        setGeneratedImageUrl(''); // Clear the generated image URL
+        setGeneratedImageUrl('');
       } catch (error) {
         setResult(`Error: ${error.message}`);
       }
@@ -28,19 +28,19 @@ function App() {
   const handleGenerateClick = async () => {
     if (inputValue) {
       try {
-        setIsLoading(true); // Set loading state
-        const generationResult = await generateImage(inputValue); // Call the generateImage function
-        setGeneratedImageUrl(generationResult.url); // Set the generated image URL
-        setIsLoading(false); // Clear loading state
+        setIsLoading(true);
+        const generationResult = await generateImage(inputValue);
+        setGeneratedImageUrl(generationResult.url);
+        setIsLoading(false);
       } catch (error) {
-        setGeneratedImageUrl(''); // Clear the generated image URL on error
+        setGeneratedImageUrl('');
         setResult(`Error: ${error.message}`);
       }
     } else {
-      setGeneratedImageUrl(''); // Clear the generated image URL if no input
+      setGeneratedImageUrl('');
       setResult('Please enter a valid prompt.');
     }
-  };
+  }
 
   return (
     <div>
@@ -62,17 +62,17 @@ function App() {
 
       <div id="result">{result}</div>
 
-      {/* Display the generated image if generatedImageUrl is not empty */}
+      {isLoading ? <p>Loading...</p> : null}
+
       {generatedImageUrl && (
         <>
           <p>Generated Image:</p>
           <img src={generatedImageUrl} alt="Generated Image" />
         </>
       )}
-
-      {isLoading && <p>Loading...</p>} {/* Show loading indicator */}
     </div>
   );
 }
 
 export default App;
+
