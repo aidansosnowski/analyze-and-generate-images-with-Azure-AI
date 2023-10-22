@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { analyzeImage, isConfigured as isAnalysisConfigured } from './azure-image-analysis';
-import { generateImage, isConfigured as isGenerationConfigured } from './azure-image-generation';
+import { generateImage, isConfigured as isGenerationConfigured } from './azure-image-generation'; // Correct the import
 import dotenv from 'dotenv';
 
 dotenv.config(); // Load environment variables from .env
