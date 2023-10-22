@@ -1,9 +1,15 @@
-// azure-image-generation.js
-
-const apiKey = process.env.OPEN_AI_API_KEY;
+const apiKey = process.env.REACT_APP_AZURE_API_KEY;
 const endpoint = process.env.REACT_APP_AZURE_ENDPOINT;
 
+function isConfigured() {
+  return Boolean(apiKey && endpoint);
+}
+
 async function generateImage(prompt, n = 1, size = '1024x1024') {
+  if (!isConfigured()) {
+    throw new Error('Azure AI services are not properly configured.');
+  }
+
   const apiUrl = `${endpoint}/openai/images/generations:submit?api-version=2023-06-01-preview`;
 
   const headers = new Headers({
@@ -35,4 +41,5 @@ async function generateImage(prompt, n = 1, size = '1024x1024') {
   }
 }
 
-export { generateImage };
+export { generateImage, isConfigured };
+
