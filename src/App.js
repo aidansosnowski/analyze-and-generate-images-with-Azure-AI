@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
+import { analyzeImage } from './azure-image-analysis'; // Import the analyzeImage function
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [result, setResult] = useState('');
 
-  const handleAnalyzeClick = () => {
-    // Perform image analysis here and update the result
-    setResult(`Analyzing image: ${inputValue}`);
+  const handleAnalyzeClick = async () => {
+    if (inputValue) {
+      try {
+        const analysisResult = await analyzeImage(inputValue);
+        setResult(JSON.stringify(analysisResult, null, 2));
+      } catch (error) {
+        setResult(`Error: ${error.message}`);
+      }
+    } else {
+      setResult('Please enter a valid URL or prompt.');
+    }
   };
 
   const handleGenerateClick = () => {
@@ -38,3 +50,4 @@ function App() {
 }
 
 export default App;
+
