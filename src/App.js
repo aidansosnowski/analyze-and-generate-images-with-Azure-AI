@@ -66,8 +66,8 @@ function App() {
 
       {generatedImageUrl && (
         <>
-          <p>Generated Image:</p>
-          <img src={generatedImageUrl} alt="Generated Image" />
+          <p>Generated:</p>
+          <img src={generatedImageUrl} alt="Generated" />
         </>
       )}
     </div>
