@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { analyzeImage } from './azure-image-analysis';
-import { generateImage } from './azure-image-generation';
+import React, { useState, useEffect } from 'react';
+import { analyzeImage, isConfigured as isAnalysisConfigured } from './azure-image-analysis';
+import { generateImage, isConfigured as isGenerationConfigured } from './azure-image-generation';
 import dotenv from 'dotenv';
 
 dotenv.config(); // Load environment variables from .env
@@ -10,8 +10,21 @@ function App() {
   const [result, setResult] = useState('');
   const [generatedImageUrl, setGeneratedImageUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isConfigured, setIsConfigured] = useState(true); // State to track configuration status
+
+  // Check if both Azure services are configured
+  useEffect(() => {
+    const isAzureConfigured = isAnalysisConfigured() && isGenerationConfigured();
+    setIsConfigured(isAzureConfigured);
+  }, []);
 
   const handleAnalyzeClick = async () => {
+    // Check if Azure services are configured before making the call
+    if (!isConfigured) {
+      setResult('Azure AI services are not properly configured.');
+      return;
+    }
+
     if (inputValue) {
       try {
         const analysisResult = await analyzeImage(inputValue);
@@ -26,6 +39,12 @@ function App() {
   };
 
   const handleGenerateClick = async () => {
+    // Check if Azure services are configured before making the call
+    if (!isConfigured) {
+      setResult('Azure AI services are not properly configured.');
+      return;
+    }
+
     if (inputValue) {
       try {
         setIsLoading(true);
@@ -45,6 +64,13 @@ function App() {
   return (
     <div>
       <h1>Image Analysis and Generation</h1>
+
+      {isConfigured ? null : (
+        <div>
+          <p>Azure AI services are not properly configured.</p>
+          <p>Please set the required environment variables.</p>
+        </div>
+      )}
 
       <label htmlFor="inputField">Enter URL or Prompt:</label>
       <input

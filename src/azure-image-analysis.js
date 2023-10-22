@@ -2,6 +2,13 @@
 
 const apiKey = process.env.REACT_APP_AZURE_API_KEY;
 const endpoint = process.env.OPEN_AI_ENDPOINT;
+// In azure-image-generation.js
+function isConfigured() {
+    return Boolean(process.env.REACT_APP_AZURE_API_KEY && process.env.REACT_APP_AZURE_ENDPOINT);
+  }
+  
+  export { isConfigured };
+  
 
 async function analyzeImage(imageUrl) {
   
