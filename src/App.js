@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { analyzeImage, isConfigured as isAnalysisConfigured } from './azure-image-analysis';
-import { generateImage, isConfigured as isGenerationConfigured } from './azure-image-generation'; // Correct the import
+import { generateImage, isConfigured as isGenerationConfigured } from './azure-image-generation';
 import dotenv from 'dotenv';
 
 dotenv.config(); // Load environment variables from .env
@@ -10,16 +10,15 @@ function App() {
   const [result, setResult] = useState('');
   const [generatedImageUrl, setGeneratedImageUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isConfigured, setIsConfigured] = useState(true); // State to track configuration status
+  const [isConfigured, setIsConfigured] = useState(true);
+  const [generationResult, setGenerationResult] = useState(null);
 
-  // Check if both Azure services are configured
   useEffect(() => {
     const isAzureConfigured = isAnalysisConfigured() && isGenerationConfigured();
     setIsConfigured(isAzureConfigured);
   }, []);
 
   const handleAnalyzeClick = async () => {
-    // Check if Azure services are configured before making the call
     if (!isConfigured) {
       setResult('Azure AI services are not properly configured.');
       return;
@@ -39,7 +38,6 @@ function App() {
   };
 
   const handleGenerateClick = async () => {
-    // Check if Azure services are configured before making the call
     if (!isConfigured) {
       setResult('Azure AI services are not properly configured.');
       return;
@@ -48,9 +46,10 @@ function App() {
     if (inputValue) {
       try {
         setIsLoading(true);
-        const generationResult = await generateImage(inputValue);
-        setGeneratedImageUrl(generationResult.url);
+        const response = await generateImage(inputValue);
+        setGenerationResult(response); // Store the generation result
         setIsLoading(false);
+        setGeneratedImageUrl(response.url);
       } catch (error) {
         setGeneratedImageUrl('');
         setResult(`Error: ${error.message}`);
@@ -96,9 +95,17 @@ function App() {
           <img src={generatedImageUrl} alt="Generated" />
         </>
       )}
+
+      {generationResult && (
+        <div>
+          <p>Generation Prompt: {inputValue}</p>
+          <p>Generated Image URL: {generationResult.url}</p>
+          <p>Generation Result:</p>
+          <pre>{JSON.stringify(generationResult, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
 }
 
 export default App;
-
